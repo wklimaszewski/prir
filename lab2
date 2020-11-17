@@ -1,0 +1,113 @@
+import java.io.Console;
+import java.util.Scanner;
+
+
+public class M_prostokatow extends Thread {
+    double xp, xk;
+    private static double func(double x) {
+        return 2*x*x;
+    }
+    public M_prostokatow(double xp, double xk)
+    {
+        this.xp= xp;
+        this.xk = xk;
+    }
+    public void run() {
+        double dx;
+        double n = 1;
+
+        dx = (xk - xp) / (double)n;
+
+        double calka = 0;
+        for (int i=1; i<=n; i++) {
+            calka += func(xp + i * dx);
+        }
+        calka *= dx;
+
+        System.out.println("M_prostokątów: "+calka);
+
+
+    }
+
+}
+
+import java.util.Scanner;
+
+public class M_trapezow extends Thread {
+
+    double xp,xk,dx, calka;
+    int n=1;
+    private static double func(double x) {
+        return x*x*2;
+    }
+
+    public M_trapezow (double xp, double xk)
+    {
+        this.xp = xp;
+        this.xk=xk;
+    }
+
+    public void run() {
+        dx = (xk - xp) / (double)n;
+
+        calka = 0;
+        for (int i=1; i<n; i++) {
+            calka += func(xp + i * dx);
+        }
+        calka += (func(xp) + func(xk)) / 2;
+        calka *= dx;
+        System.out.println("M_trapezów: "+calka);
+    }
+
+}
+
+import java.util.Scanner;
+
+public class M_simpsona extends Thread {
+    double xp, xk, dx, calka, s, x;
+    int n = 1;
+
+    public M_simpsona(double xp, double xk) {
+        this.xp = xp;
+        this.xk = xk;
+    }
+
+    public void run() {
+        dx = (xk - xp) / (double) n;
+
+        calka = 0;
+        s = 0;
+        for (int i = 1; i < n; i++) {
+            x = xp + i * dx;
+            s += func(x - dx / 2);
+            calka += func(x);
+        }
+        s += func(xk - dx / 2);
+        calka = (dx / 6) * (func(xp) + func(xk) + 2 * calka + 4 * s);
+
+        System.out.println("M_simpsona " + calka);
+
+    }
+
+    private static double func(double x) {
+        return x * x * 2;
+    }
+
+}
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class main {
+    public static void main(String[] args) {
+        Thread m1  = new M_simpsona(1,2);
+        Thread m2  = new M_trapezow(1,2);
+        Thread m3 = new M_prostokatow(1,2);
+
+        m1.start();
+        m2.start();
+        m3.start();
+
+
+    }
+}
